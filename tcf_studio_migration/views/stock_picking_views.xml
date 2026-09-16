@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="stock_picking_form_studio_migration" model="ir.ui.view">
+            <field name="name">stock.picking.form.migration</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <page string="MO Info" name="additional_info_migration"
+                          invisible="not mrp_production_id">
+                        <field name="mrp_production_id" invisible="1"/>
+                        <group string="Final Product">
+                            <group>
+                                <field name="final_product_id"/>
+                                <field name="final_product_qty"/>
+                            </group>
+                            <group>
+                                <field name="lot_for_final_product_id"/>
+                                <field name="special_code_for_final_product"/>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

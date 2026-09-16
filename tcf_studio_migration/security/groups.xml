@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="group_brand_user" model="res.groups">
+            <field name="name">Brand / User</field>
+        </record>
+
+        <record id="group_brand_manager" model="res.groups">
+            <field name="name">Brand / Manager</field>
+            <field name="implied_ids" eval="[(4, ref('group_brand_user'))]"/>
+        </record>
+
+        <record id="group_perfume_user" model="res.groups">
+            <field name="name">Perfume / User</field>
+        </record>
+
+        <record id="group_perfume_manager" model="res.groups">
+            <field name="name">Perfume / Manager</field>
+            <field name="implied_ids" eval="[(4, ref('group_perfume_user'))]"/>
+        </record>
+
+    </data>
+</odoo>

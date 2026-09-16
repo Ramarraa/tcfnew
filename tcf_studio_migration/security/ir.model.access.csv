@@ -1,0 +1,14 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_brand_brand_user,brand.brand user,model_brand_brand,tcf_studio_migration.group_brand_user,1,0,0,0
+access_brand_brand_manager,brand.brand manager,model_brand_brand,tcf_studio_migration.group_brand_manager,1,1,1,1
+access_brand_tag_user,brand.tag user,model_brand_tag,tcf_studio_migration.group_brand_user,1,0,0,0
+access_brand_tag_manager,brand.tag manager,model_brand_tag,tcf_studio_migration.group_brand_manager,1,1,1,1
+access_fragrance_uses_user,fragrance.uses user,model_fragrance_uses,tcf_studio_migration.group_brand_user,1,0,0,0
+access_fragrance_uses_manager,fragrance.uses manager,model_fragrance_uses,tcf_studio_migration.group_brand_manager,1,1,1,1
+access_perfume_perfume_user,perfume.perfume user,model_perfume_perfume,tcf_studio_migration.group_perfume_user,1,0,0,0
+access_perfume_perfume_manager,perfume.perfume manager,model_perfume_perfume,tcf_studio_migration.group_perfume_manager,1,1,1,1
+access_product_purpose_category_user,product.purpose.category user,model_product_purpose_category,tcf_studio_migration.group_brand_user,1,0,0,0
+access_product_purpose_category_manager,product.purpose.category manager,model_product_purpose_category,tcf_studio_migration.group_brand_manager,1,1,1,1
+access_product_purpose_user,product.purpose user,model_product_purpose,tcf_studio_migration.group_brand_user,1,0,0,0
+access_product_purpose_manager,product.purpose manager,model_product_purpose,tcf_studio_migration.group_brand_manager,1,1,1,1
+access_product_purpose_internal_user,product.purpose internal user,model_product_purpose,base.group_user,1,0,0,0

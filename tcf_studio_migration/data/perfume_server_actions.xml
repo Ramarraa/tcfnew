@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_perfume_set_status_not_printed" model="ir.actions.server">
+        <field name="name">Set Status: Not Printed</field>
+        <field name="model_id" ref="model_perfume_perfume"/>
+        <field name="binding_model_id" ref="model_perfume_perfume"/>
+        <field name="binding_view_types">list</field>
+        <field name="group_ids" eval="[(4, ref('base.group_system'))]"/>
+        <field name="state">code</field>
+        <field name="code">records.action_set_status_not_printed()</field>
+    </record>
+
+    <record id="action_perfume_set_status_printed" model="ir.actions.server">
+        <field name="name">Set Status: Printed</field>
+        <field name="model_id" ref="model_perfume_perfume"/>
+        <field name="binding_model_id" ref="model_perfume_perfume"/>
+        <field name="binding_view_types">list</field>
+        <field name="group_ids" eval="[(4, ref('base.group_system'))]"/>
+        <field name="state">code</field>
+        <field name="code">records.action_set_status_printed()</field>
+    </record>
+
+    <record id="action_perfume_set_status_to_print" model="ir.actions.server">
+        <field name="name">Set Status: To Print</field>
+        <field name="model_id" ref="model_perfume_perfume"/>
+        <field name="binding_model_id" ref="model_perfume_perfume"/>
+        <field name="binding_view_types">list</field>
+        <field name="group_ids" eval="[(4, ref('group_perfume_manager'))]"/>
+        <field name="state">code</field>
+        <field name="code">records.action_set_status_to_print()</field>
+    </record>
+
+    <record id="action_perfume_set_status_checking" model="ir.actions.server">
+        <field name="name">Set Status: Checking</field>
+        <field name="model_id" ref="model_perfume_perfume"/>
+        <field name="binding_model_id" ref="model_perfume_perfume"/>
+        <field name="binding_view_types">list</field>
+        <field name="group_ids" eval="[(4, ref('base.group_system'))]"/>
+        <field name="state">code</field>
+        <field name="code">records.action_set_status_checking()</field>
+    </record>
+</odoo>

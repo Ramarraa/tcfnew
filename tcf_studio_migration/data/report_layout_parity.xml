@@ -1,0 +1,23 @@
+<odoo>
+    <!-- one-shot: disable the v19 'Terms: <url>' line on new quotations -->
+    <function model="res.company" name="_tcf_disable_quotation_terms_link" eval="[[]]"/>
+
+    <!-- Re-assert the v16 look on the Studio-duplicated 'Picking Operations SC
+         copy(1)' and 'Delivery Slip SC' report bodies on every module update
+         (not noupdate, so this data file always re-runs). Those views have no
+         XML file of their own to inherit from - see report_studio_fixes.py. -->
+    <function model="res.company" name="_tcf_apply_studio_report_fixes" eval="[[]]"/>
+
+    <!-- v19 renamed the standard sale order print to "PDF Quote"; restore
+         the v16 label users know -->
+    <record id="sale.action_report_saleorder" model="ir.actions.report">
+        <field name="name">Quotation / Order</field>
+    </record>
+
+    <!-- sale_pdf_quote_builder (new in v19) adds a second "Quotation / Order"
+         (raw) entry to the Print menu; unbind it to avoid the duplicate.
+         The action itself is kept so nothing else breaks. -->
+    <record id="sale_pdf_quote_builder.action_report_saleorder_raw" model="ir.actions.report">
+        <field name="binding_model_id" eval="False"/>
+    </record>
+</odoo>

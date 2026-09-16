@@ -1,0 +1,23 @@
+<odoo>
+    <!-- Keep the v16 look on the boxed layout:
+         1. Recent v19 builds print the company VAT (Tax ID) in the header;
+            v16 never did - replace that li with the older empty placeholder
+            (keeps the following t-else forced_vat branch valid).
+         2. v16 drew a separator line under the header; add it back.
+         3. v16 printed the page number centred on its own line below the
+            footer, not inline at the right of it. -->
+    <template id="external_layout_boxed_no_company_vat" inherit_id="web.external_layout_boxed">
+        <xpath expr="//ul[@name='company_address_list']//t[@t-if='company.vat']/parent::li" position="replace">
+            <li t-if="not forced_vat"/>
+        </xpath>
+        <xpath expr="//div[hasclass('row', 'mb8')]" position="after">
+            <div name="tcf_header_separator" style="border-bottom: 1px solid #d3d3d3; margin-bottom: 8px;"/>
+        </xpath>
+        <xpath expr="//span[span[hasclass('page')]]" position="replace"/>
+        <xpath expr="//div[hasclass('o_footer_content')]" position="after">
+            <div t-if="report_type == 'pdf'" name="tcf_footer_page" class="text-center">
+                Page: <span class="page"/> / <span class="topage"/>
+            </div>
+        </xpath>
+    </template>
+</odoo>

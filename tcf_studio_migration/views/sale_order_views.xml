@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="sale_order_form_studio_migration" model="ir.ui.view">
+            <field name="name">sale.order.form.migration</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='order_line']/list/field[@name='product_id']" position="after">
+                    <field name="alternative_code"
+                           string="Alternative Code"
+                           optional="show"
+                           readonly="1"/>
+                </xpath>
+
+                <xpath expr="//page[@name='other_information']" position="inside">
+                    <group name="bank_details" string="Bank Details">
+                        <group>
+                            <field name="bank_account_id"/>
+                            <field name="iban_number"/>
+                            <field name="branch_code"/>
+                        </group>
+                        <group>
+                            <field name="swift_code"/>
+                            <field name="account_name"/>
+                            <field name="bank_account_currency_id"/>
+                        </group>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

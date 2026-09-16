@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="brand_tag_view_form" model="ir.ui.view">
+            <field name="name">brand.tag.form</field>
+            <field name="model">brand.tag</field>
+            <field name="arch" type="xml">
+                <form string="Brand Tag">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="color" widget="color_picker"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="brand_tag_view_list" model="ir.ui.view">
+            <field name="name">brand.tag.list</field>
+            <field name="model">brand.tag</field>
+            <field name="arch" type="xml">
+                <list string="Brand Tags">
+                    <field name="name"/>
+                    <field name="color" widget="color_picker"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="brand_tag_view_search" model="ir.ui.view">
+            <field name="name">brand.tag.search</field>
+            <field name="model">brand.tag</field>
+            <field name="arch" type="xml">
+                <search string="Brand Tags">
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_brand_tag" model="ir.actions.act_window">
+            <field name="name">Brand Tags</field>
+            <field name="res_model">brand.tag</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+    </data>
+</odoo>

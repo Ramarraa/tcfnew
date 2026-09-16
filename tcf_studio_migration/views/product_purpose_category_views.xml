@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="product_purpose_category_view_form" model="ir.ui.view">
+            <field name="name">product.purpose.category.form</field>
+            <field name="model">product.purpose.category</field>
+            <field name="arch" type="xml">
+                <form string="Product Purpose Category">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_purposes" type="object"
+                                    class="oe_stat_button" icon="fa-list"
+                                    invisible="purpose_count == 0">
+                                <field name="purpose_count" widget="statinfo" string="Purposes"/>
+                            </button>
+                        </div>
+                        <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                        <field name="active" invisible="1"/>
+                        <field name="image_128" widget="image" class="oe_avatar"/>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name" placeholder="Category Name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <field name="sequence"/>
+                        </group>
+                        <notebook>
+                            <page string="Notes" name="notes">
+                                <field name="notes"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="product_purpose_category_view_list" model="ir.ui.view">
+            <field name="name">product.purpose.category.list</field>
+            <field name="model">product.purpose.category</field>
+            <field name="arch" type="xml">
+                <list string="Product Purpose Categories">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="image_128" widget="image"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="product_purpose_category_view_search" model="ir.ui.view">
+            <field name="name">product.purpose.category.search</field>
+            <field name="model">product.purpose.category</field>
+            <field name="arch" type="xml">
+                <search string="Product Purpose Categories">
+                    <field name="name"/>
+                    <filter string="Archived" name="archived" domain="[('active', '=', False)]"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_product_purpose_category" model="ir.actions.act_window">
+            <field name="name">Product Purpose Categories</field>
+            <field name="res_model">product.purpose.category</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <record id="action_product_purpose_from_category" model="ir.actions.act_window">
+            <field name="name">Purposes</field>
+            <field name="res_model">product.purpose</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[('category_id', '=', active_id)]</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="product_template_search_studio_migration" model="ir.ui.view">
+            <field name="name">product.template.search.migration</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_search_view"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//search" position="inside">
+                        <field name="cas_number"/>
+                        <field name="scrap_name"/>
+                        <field name="alternative_code"/>
+                        <field name="scrap_arabic_name"/>
+                        <field name="purpose_ids"/>
+                        <field name="common_code"/>
+                        <field name="fragrance_use_id"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+
+        <record id="product_template_form_studio_migration" model="ir.ui.view">
+            <field name="name">product.template.form.migration</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <!-- Apply after other product.template.form inheriting views (e.g. website_sale's,
+                 which is priority 16 and adds product_tag_ids into the 'extra_info' group below)
+                 so the group we replace has already received their fields, instead of racing
+                 them and deleting the group before they can insert into it. -->
+            <field name="priority" eval="99"/>
+            <field name="arch" type="xml">
+                <data>
+                    <!-- Remove the original Sales placement, then render Extra
+                         Info below Quantity On Hand in the left column. -->
+                    <xpath expr="//page[@name='sales']//group[@name='extra_info']" position="replace"/>
+                    <xpath expr="//page[@name='general_information']//div[field[@name='qty_available']][1]" position="after">
+                        <separator string="Extra Info" colspan="2"/>
+                        <field name="product_tag_ids" widget="many2many_tags"
+                               context="{'product_template_id': id}"/>
+                    </xpath>
+
+                    <!-- CAS Number, Fragrance Use, Purposes, Alternative Code: after product tags
+                         (product_template_form_view has no default_code field - that only exists
+                         on product_template_only_form_view, since a template's variants each have
+                         their own code) -->
+                    <xpath expr="//field[@name='product_tag_ids']" position="after">
+                        <field name="cas_number" string="CAS Number"/>
+                        <field name="fragrance_use_id" required="categ_id == 13"/>
+                        <field name="purpose_ids" widget="many2many_tags"
+                               string="Purposes Of Product"
+                               options="{'no_create': true}"/>
+                        <field name="alternative_code" string="Alternative Code"
+                               readonly="categ_id != 13"/>
+                    </xpath>
+
+                    <!-- Other Options page: admin, common, and scrap fields -->
+                    <xpath expr="//notebook" position="inside">
+                        <page string="Other Options" name="other_options_migration">
+                            <group>
+                                <group>
+                                    <field name="admin_key" string="Key"/>
+                                    <field name="scrapped" invisible="admin_key != '132'"/>
+                                    <field name="common_code" string="Common Code" readonly="1"/>
+                                    <field name="common_name" string="Common Name"/>
+                                </group>
+                                <group>
+                                    <field name="scrap_name" invisible="not scrapped"/>
+                                    <field name="scrap_arabic_name" invisible="not scrapped"/>
+                                    <field name="brand_company" invisible="not scrapped"/>
+                                </group>
+                            </group>
+                        </page>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+
+        <!-- KG Price and FCost: labelled rows in the pricing group.
+             Adding them "after taxes_id" rendered them inline with no label on
+             Odoo 19; placing them inside group_standard_price gives each field
+             its own labelled row (like Sales Price / Cost). -->
+        <record id="product_template_only_form_studio_migration" model="ir.ui.view">
+            <field name="name">product.template.only.form.migration</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='group_standard_price']" position="inside">
+                    <field name="kg_price"/>
+                    <field name="fcost"/>
+                    <field name="fcost_monetary"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

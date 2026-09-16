@@ -1,0 +1,182 @@
+<odoo>
+    <!-- v16-parity "Cost Analysis Report": a static PDF (Components/Operations
+         cost breakdown) that Odoo 19 core no longer ships - it was replaced
+         by the interactive "MO Overview" client widget (mrp.report_mo_overview),
+         which has a different layout and isn't a plain printable PDF. Rebuilt
+         from scratch to match the old report's exact structure, bound as its
+         own new report action (there's no core action to override here)
+         printable from the Manufacturing Order's Print menu. -->
+    <template id="report_mo_cost_analysis">
+        <t t-set="doc" t-value="False"/>
+        <t t-set="o" t-value="False"/>
+        <t t-call="web.basic_layout">
+            <t t-set="cost" t-value="cost_analysis"/>
+            <div class="page o_tcf_mo_cost_analysis">
+                <style t-translation="off">
+                    .o_tcf_mo_cost_analysis h2 {
+                        margin-bottom: 4px;
+                    }
+                    .o_tcf_mo_cost_analysis .o_tcf_mo_subtitle {
+                        margin-bottom: 24px;
+                    }
+                    .o_tcf_mo_cost_analysis table {
+                        width: 100%;
+                        margin-bottom: 16px;
+                        border-collapse: collapse;
+                    }
+                    .o_tcf_mo_cost_analysis table th,
+                    .o_tcf_mo_cost_analysis table td {
+                        padding: 6px 8px;
+                    }
+                    .o_tcf_mo_cost_analysis table thead th {
+                        background-color: #f4f4f4;
+                        font-weight: 700;
+                        border-bottom: 1px solid #dee2e6;
+                    }
+                    .o_tcf_mo_cost_analysis table td.text-end,
+                    .o_tcf_mo_cost_analysis table th.text-end {
+                        text-align: right;
+                    }
+                    .o_tcf_mo_cost_analysis .o_tcf_component_name {
+                        color: #00a09d;
+                    }
+                    .o_tcf_mo_cost_analysis tr.o_tcf_total_row td {
+                        background-color: #f4f4f4;
+                        font-weight: 700;
+                        border-top: 1px solid #dee2e6;
+                    }
+                    .o_tcf_mo_cost_analysis .o_tcf_grand_total {
+                        width: 45%;
+                        margin-left: auto;
+                        margin-top: 16px;
+                    }
+                    .o_tcf_mo_cost_analysis .o_tcf_grand_total td {
+                        border-top: 1px solid #dee2e6;
+                        padding: 6px 8px;
+                        font-weight: 700;
+                    }
+                </style>
+
+                <h2>Cost Analysis Report</h2>
+                <p class="o_tcf_mo_subtitle">
+                    <strong>
+                        <t t-if="cost['product'].default_code">[<t t-esc="cost['product'].default_code"/>] </t><t t-esc="cost['product'].name"/>,
+                        <t t-out="cost['total_qty']" t-options="{'widget': 'float', 'precision': 1}"/> <t t-esc="cost['uom_name']"/>,
+                        from <t t-esc="cost['mo_count']"/> manufacturing order(s).
+                    </strong>
+                </p>
+
+                <h4>Cost of Components</h4>
+                <table class="table table-sm" t-if="cost['components']">
+                    <thead>
+                        <tr>
+                            <th>Components</th>
+                            <th class="text-end">Quantity</th>
+                            <th class="text-end">Unit Cost</th>
+                            <th class="text-end">Total Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="cost['components']" t-as="line">
+                            <td class="o_tcf_component_name">
+                                <t t-if="line['code']">[<t t-esc="line['code']"/>] </t><t t-esc="line['name']"/>
+                            </td>
+                            <td class="text-end">
+                                <t t-out="line['qty']" t-options="{'widget': 'float', 'precision': 4}"/> <t t-esc="line['uom_name']"/>
+                            </td>
+                            <td class="text-end">
+                                <t t-out="line['unit_cost']" t-options="{'widget': 'monetary', 'display_currency': cost['currency']}"/>
+                            </td>
+                            <td class="text-end">
+                                <t t-out="line['total_cost']" t-options="{'widget': 'monetary', 'display_currency': cost['currency']}"/>
+                            </td>
+                        </tr>
+                        <tr class="o_tcf_total_row">
+                            <td colspan="3" class="text-end">Total Cost of Components</td>
+                            <td class="text-end">
+                                <t t-out="cost['total_components_cost']" t-options="{'widget': 'monetary', 'display_currency': cost['currency']}"/>
+                            </td>
+                        </tr>
+                        <tr class="o_tcf_total_row">
+                            <td colspan="3" class="text-end">Cost of Components per unit (in <t t-esc="cost['uom_name']"/>)</td>
+                            <td class="text-end">
+                                <t t-out="cost['components_cost_per_unit']" t-options="{'widget': 'monetary', 'display_currency': cost['currency']}"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>Cost of Operations</h4>
+                <table class="table table-sm" t-if="cost['operations']">
+                    <thead>
+                        <tr>
+                            <th>Resource</th>
+                            <th>Operation</th>
+                            <th class="text-end">Working Time</th>
+                            <th class="text-end">Cost/hour</th>
+                            <th class="text-end">Total Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="cost['operations']" t-as="line">
+                            <td><t t-esc="line['resource']"/></td>
+                            <td><t t-esc="line['operation']"/></td>
+                            <td class="text-end">
+                                <t t-out="line['duration_hours']" t-options="{'widget': 'float', 'precision': 4}"/> hours
+                            </td>
+                            <td class="text-end">
+                                <t t-out="line['cost_hour']" t-options="{'widget': 'monetary', 'display_currency': cost['currency']}"/>
+                            </td>
+                            <td class="text-end">
+                                <t t-out="line['total_cost']" t-options="{'widget': 'monetary', 'display_currency': cost['currency']}"/>
+                            </td>
+                        </tr>
+                        <tr class="o_tcf_total_row">
+                            <td colspan="4" class="text-end">Total Cost of Operations</td>
+                            <td class="text-end">
+                                <t t-out="cost['total_operations_cost']" t-options="{'widget': 'monetary', 'display_currency': cost['currency']}"/>
+                            </td>
+                        </tr>
+                        <tr class="o_tcf_total_row">
+                            <td colspan="4" class="text-end">Cost of Operations per unit (in <t t-esc="cost['uom_name']"/>)</td>
+                            <td class="text-end">
+                                <t t-out="cost['operations_cost_per_unit']" t-options="{'widget': 'monetary', 'display_currency': cost['currency']}"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p t-if="not cost['operations']">
+                    <em>No operations.</em>
+                </p>
+
+                <table class="o_tcf_grand_total">
+                    <tbody>
+                        <tr>
+                            <td class="text-end">Total Production Cost</td>
+                            <td class="text-end">
+                                <t t-out="cost['total_production_cost']" t-options="{'widget': 'monetary', 'display_currency': cost['currency']}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-end">Total Cost per unit (in <t t-esc="cost['uom_name']"/>)</td>
+                            <td class="text-end">
+                                <t t-out="cost['total_cost_per_unit']" t-options="{'widget': 'monetary', 'display_currency': cost['currency']}"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </t>
+    </template>
+
+    <record id="action_report_mo_cost_analysis" model="ir.actions.report">
+        <field name="name">Cost Analysis</field>
+        <field name="model">mrp.production</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">tcf_studio_migration.report_mo_cost_analysis</field>
+        <field name="report_file">tcf_studio_migration.report_mo_cost_analysis</field>
+        <field name="print_report_name">'Cost Analysis - %s' % object.name</field>
+        <field name="binding_model_id" ref="mrp.model_mrp_production"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

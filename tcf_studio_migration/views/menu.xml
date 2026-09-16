@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Top-level menu -->
+        <menuitem
+            id="menu_brands_perfumes_root"
+            name="Brands &amp; Perfumes"
+            sequence="90"
+        />
+
+        <!-- Brands submenu -->
+        <menuitem
+            id="menu_brands_perfumes_brands"
+            name="Brands"
+            parent="menu_brands_perfumes_root"
+            action="action_brand_brand"
+            sequence="10"
+        />
+
+        <menuitem
+            id="menu_brands_perfumes_brand_tags"
+            name="Brand Tags"
+            parent="menu_brands_perfumes_root"
+            action="action_brand_tag"
+            sequence="20"
+        />
+
+        <menuitem
+            id="menu_brands_perfumes_fragrance_uses"
+            name="Fragrance Uses"
+            parent="menu_brands_perfumes_root"
+            action="action_fragrance_uses"
+            sequence="30"
+        />
+
+        <menuitem
+            id="menu_brands_perfumes_perfumes"
+            name="Perfumes"
+            parent="menu_brands_perfumes_root"
+            action="action_perfume_perfume"
+            sequence="40"
+        />
+
+        <!-- Configuration submenu -->
+        <menuitem
+            id="menu_brands_perfumes_config"
+            name="Configuration"
+            parent="menu_brands_perfumes_root"
+            sequence="90"
+        />
+
+        <menuitem
+            id="menu_brands_perfumes_purpose_categories"
+            name="Product Purpose Categories"
+            parent="menu_brands_perfumes_config"
+            action="action_product_purpose_category"
+            sequence="10"
+        />
+
+        <menuitem
+            id="menu_brands_perfumes_purposes"
+            name="Product Purposes"
+            parent="menu_brands_perfumes_config"
+            action="action_product_purpose"
+            sequence="20"
+        />
+
+    </data>
+</odoo>
