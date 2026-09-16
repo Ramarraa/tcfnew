@@ -1,0 +1,39 @@
+<odoo>
+    <record id="view_product_packaging_sale_order_form" model="ir.ui.view">
+        <field name="name">view.product.packaging.sale.sale.order.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_view_delivery']" position="before">
+                <button type="object" name="action_view_delivery_packaging" class="oe_stat_button" icon="fa-truck"
+                        invisible="delivery_packaging_count == 0" groups="stock.group_stock_user">
+                    <field name="delivery_packaging_count" widget="statinfo" string="Delivery Packaging"/>
+                </button>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']/list/field[@name='product_uom_id']" position="after">
+                <field name="available_packaging_uom_ids" column_invisible="1"/>
+                <field name="packaging_reference_factor" column_invisible="1"/>
+                <field name="packaging_uom_id"
+                       widget="packaging_many2one"
+                       domain="[('id', 'in', available_packaging_uom_ids)]"
+                       context="{'packaging_reference_factor': packaging_reference_factor}"
+                       options="{'no_create': True, 'no_open': True}"
+                       optional="show"/>
+                <field name="packaging_qty"
+                       string="Packaging Quantity"
+                       optional="show"
+                       readonly="not packaging_uom_id"/>
+                <field name="extra_price"
+                       string="Extra Price"
+                       optional="show"
+                       readonly="not packaging_uom_id"/>
+                <field name="price_unit_original"
+                       string="Original Unit Price"
+                       optional="show"
+                       readonly="1"/>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>
