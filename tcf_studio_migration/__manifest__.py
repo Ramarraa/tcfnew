@@ -1,5 +1,5 @@
 {
-    'name': 'TCF Studio Migration',
+    'name': 'TCF Studio Migration19',
     'version': '19.0.1.3.41',
     'summary': 'Migrates Odoo Studio custom x_ fields to native Python fields',
     'author': 'Al Jawad',
