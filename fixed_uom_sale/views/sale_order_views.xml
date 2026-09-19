@@ -1,0 +1,12 @@
+<odoo>
+    <record id="view_fixed_uom_sale_order_form" model="ir.ui.view">
+        <field name="name">view.fixed.uom.sale.order.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/list/field[@name='product_uom_id']" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

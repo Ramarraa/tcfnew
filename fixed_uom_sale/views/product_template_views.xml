@@ -1,0 +1,62 @@
+<odoo>
+    <record id="view_fixed_uom_sale_product_template_form" model="ir.ui.view">
+        <field name="name">view.fixed.uom.sale.product.template.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='list_price_uom']" position="after">
+                <field name="uom_root_path" invisible="1"/>
+                <field name="sale_uom_id" groups="uom.group_uom"
+                       invisible="not sale_ok"
+                       required="sale_ok == True"
+                       options="{'no_create': True, 'no_open': True}"/>
+                <field name="sale_samples_uom_id" groups="uom.group_uom"
+                       invisible="not sale_ok"
+                       required="sale_ok == True"
+                       options="{'no_create': True, 'no_open': True}"/>
+                <field name="purchase_uom_id" groups="uom.group_uom"
+                       invisible="not purchase_ok"
+                       options="{'no_create': True, 'no_open': True}"/>
+
+            </xpath>
+
+            <!-- Move (not delete+recreate) the original Sales placement of
+                 uom_ids into the Inventory tab: core's own
+                 product_normal_form_view (product.product's form) has its
+                 own later spec expecting to still find <field
+                 name="uom_ids"> to tweak its context - deleting it here and
+                 inserting an unrelated new element with the same name broke
+                 that. position="move" relocates the very same field node,
+                 so it is still there for core to find.
+
+                 The empty group and the move must be two separate xpath
+                 specs: position="move" only locates and relocates a node
+                 that already exists in the accumulated tree, so it can't
+                 target a <field> nested inside a <group> that this same
+                 spec is still in the middle of inserting - that combination
+                 silently left uom_ids duplicated (still visible under
+                 Sales's Upsell & Cross-Sell, which core's own sale module
+                 unhides once Sales is installed, as well as the "moved"
+                 copy under Inventory). Creating the group first, then
+                 moving the field into that now-existing group in a second
+                 spec, actually removes it from the Sales tab. -->
+            <xpath expr="//page[@name='inventory']" position="inside">
+                <group name="product_packaging" string="Packaging"/>
+            </xpath>
+            <xpath expr="//group[@name='product_packaging']" position="inside">
+                <field name="uom_ids" position="move"/>
+            </xpath>
+
+            <!-- Now that uom_ids lives in this group, apply its display
+                 customization (same attributes as before, just applied
+                 after the move instead of on a freshly-created element). -->
+            <xpath expr="//group[@name='product_packaging']/field[@name='uom_ids']" position="attributes">
+                <attribute name="widget">many2many_uom_tags</attribute>
+                <attribute name="options">{'no_quick_create': True, 'edit_tags': True}</attribute>
+                <attribute name="groups">uom.group_uom</attribute>
+                <attribute name="force_save">1</attribute>
+                <attribute name="context">{'product_id': product_variant_id if product_variant_count == 1 else False, 'product_ids': product_variant_ids, 'show_variant_name': product_variant_count > 1}</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>
