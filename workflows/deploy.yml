@@ -12,8 +12,8 @@ jobs:
 
       - name: Sync modules to Odoo addons path
         run: |
-          rsync -av --delete product_packaging_sale/ /opt/odoo19/tcf_upgrade/product_packaging_sale/
-          rsync -av --delete tcf_studio_migration/ /opt/odoo19/tcf_upgrade/tcf_studio_migration/
+          rsync -av --delete product_packaging_sale/ /opt/odoo19/custom-addons/product_packaging_sale/
+          rsync -av --delete tcf_studio_migration/ /opt/odoo19/custom-addons/tcf_studio_migration/
 
       - name: Restart Odoo service
-        run: sudo systemctl restart odoo19
+        run: sudo systemctl restart odoo
