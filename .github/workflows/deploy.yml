@@ -10,10 +10,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Sync modules to Odoo addons path
+      - name: Sync all modules to Odoo addons path
         run: |
-          rsync -av --delete product_packaging_sale/ /opt/odoo19/custom-addons/product_packaging_sale/
-          rsync -av --delete tcf_studio_migration/ /opt/odoo19/custom-addons/tcf_studio_migration/
+          for dir in */; do
+            module="${dir%/}"
+            if [ -f "$module/__manifest__.py" ]; then
+              echo "Syncing $module"
+              rsync -av --delete "$module/" "/opt/odoo19/custom-addons/$module/"
+            fi
+          done
 
       - name: Restart Odoo service
         run: sudo systemctl restart odoo
