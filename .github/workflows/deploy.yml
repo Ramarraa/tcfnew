@@ -21,4 +21,4 @@ jobs:
           done
 
       - name: Restart Odoo service
-        run: sudo systemctl restart odoo
+        run: sudo systemctl restart odoo19
